@@ -16,15 +16,46 @@ if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
-// set meta field to break by, if field is not set will be break by post date
-define( 'JET_ENGINE_BREAK_BY_FIELD', false );
-
-define( 'JET_ENGINE_BREAK_BY_QUERY_ID', 'break_months' );
-
 class Jet_Engine_Break_Listing_By_Months {
 
 	public function __construct() {
+
+		add_action( 'init', array( $this, 'setup' ) );
 		add_action( 'jet-engine/listing/before-grid-item', array( $this, 'handle_item' ), 10, 2 );
+
+	}
+
+	/**
+	 * These constants could be defined from functions.php file of your active theme
+	 * @return [type] [description]
+	 */
+	public function setup() {
+
+		if ( ! defined( 'JET_ENGINE_BREAK_BY_FIELD' ) ) {
+			// set meta field to break by, if field is not set will be break by post date
+			define( 'JET_ENGINE_BREAK_BY_FIELD', false );
+		}
+		
+		if ( ! defined( 'JET_ENGINE_BREAK_BY_QUERY_ID' ) ) {
+			// set query ID to break by. Same query ID need to be set also for Listing and filter wisgets if you using this in combination with JSF
+			define( 'JET_ENGINE_BREAK_BY_QUERY_ID', 'break_months' );
+		}
+
+		if ( ! defined( 'JET_ENGINE_BREAK_MONTH_OPEN_HTML' ) ) {
+			// set opening html tag(s) for month name
+			define( 'JET_ENGINE_BREAK_MONTH_OPEN_HTML', '<h4 class="jet-engine-break-listing" style="width:100%; flex: 0 0 100%;">' );
+		}
+
+		if ( ! defined( 'JET_ENGINE_BREAK_MONTH_CLOSE_HTML' ) ) {
+			// set closing html tag(s) for month name
+			define( 'JET_ENGINE_BREAK_MONTH_CLOSE_HTML', '</h4>' );
+		}
+
+		if ( ! defined( 'JET_ENGINE_BREAK_MONTH_FORMAT' ) ) {
+			// set format of the month to show
+			define( 'JET_ENGINE_BREAK_MONTH_FORMAT', 'F, Y' );
+		}
+
 	}
 
 	public function handle_item( $post, $listing ) {
@@ -91,9 +122,9 @@ class Jet_Engine_Break_Listing_By_Months {
 			return;
 		}
 
-		echo '<h4 class="jet-engine-break-listing" style="width:100%; flex: 0 0 100%;">';
-		echo date_i18n( 'F, Y', $timestamp );
-		echo '</h4>';
+		echo JET_ENGINE_BREAK_MONTH_OPEN_HTML;
+		echo date_i18n( JET_ENGINE_BREAK_MONTH_FORMAT, $timestamp );
+		echo JET_ENGINE_BREAK_MONTH_CLOSE_HTML;
 
 	}
 
