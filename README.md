@@ -1,12 +1,14 @@
 # JetEngine - break listing by months.
 
-Allow to break single listing grid into sections separated by month. Something like this:
+Allow to break single listing grid into sections separated by month based on post publication date or date from the meta field. Something like this:
 
 ![image](https://user-images.githubusercontent.com/4987981/172800275-70fae83f-b9c4-44cf-8f79-92ec4231f4a1.png)
 
 Plugin works only with Query Builder, so you can break only listings where you get the posts with Query Builder
 
 Also at the moment plugin works only with the Posts. But you can extend it by yourself for any object type you want (details in ths **Advanced** section)
+
+And last note - plugin do not sort posts by date itself, it only adding breaks based on comparison of posts dates. So you need to sort post by your self with Query settings
 
 ## Setup
 - Download and intall plugin,
