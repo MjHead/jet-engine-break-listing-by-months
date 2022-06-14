@@ -8,7 +8,7 @@ Plugin works only with Query Builder, so you can break only listings where you g
 
 Also at the moment plugin works only with the Posts. But you can extend it by yourself for any object type you want (details in ths **Advanced** section)
 
-And last note - plugin do not sort posts by date itself, it only adding breaks based on comparison of posts dates. So you need to sort post by your self with Query settings
+And last note - plugin doesn't sort posts by date itself, it only adding breaks based on comparison of posts dates. So you need to sort post by your self with Query settings
 
 ## Setup
 - Download and intall plugin,
