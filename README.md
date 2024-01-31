@@ -27,10 +27,12 @@ Configuration example:
 **Allowed constants:**
 
 - `JET_ENGINE_BREAK_BY_FIELD` - by default `false` - breaks posts by publication date. You can set any meta field key you want insted to break by meta field,
+- `JET_ENGINE_BREAK_BY_PROP` - by default `false` - breaks items by current object property. With this option you can break by dates not only posts listings but also custom queries,
 - `JET_ENGINE_BREAK_BY_QUERY_ID` - by default 'break_months'. Trigger for breaking current listing
 - `JET_ENGINE_BREAK_MONTH_OPEN_HTML` - by default `<h4 class="jet-engine-break-listing" style="width:100%; flex: 0 0 100%;">` - opening HTML markup for month name. Please note - "style="width:100%; flex: 0 0 100%;" is important for multicolumn layout
 - `JET_ENGINE_BREAK_MONTH_CLOSE_HTML` - by default `</h4>` - closing HTML markup
-- `JET_ENGINE_BREAK_MONTH_FORMAT` - by default 'F, Y'. Date format string. Allowed merkup here - https://www.php.net/manual/en/datetime.format.php
+- `JET_ENGINE_BREAK_MONTH_FORMAT` - by default 'F, Y'. Date format string. Allowed markup here - https://www.php.net/manual/en/datetime.format.php
+- `JET_ENGINE_BREAK_MONTH_COMPARE_FORMAT` - by default 'F, Y'. Date format to compare different dates. Yu can use this option to break listing by different time frames, for example years or days. Allowed markup here - https://www.php.net/manual/en/datetime.format.php
 
 ## Advanced
 

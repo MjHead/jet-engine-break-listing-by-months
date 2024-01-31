@@ -37,6 +37,11 @@ class Jet_Engine_Break_Listing_By_Months {
 			// set meta field to break by, if field is not set will be break by post date
 			define( 'JET_ENGINE_BREAK_BY_FIELD', false );
 		}
+
+		if ( ! defined( 'JET_ENGINE_BREAK_BY_PROP' ) ) {
+			// set object property to get date from. Set this to use with non-posts queries
+			define( 'JET_ENGINE_BREAK_BY_PROP', false );
+		}
 		
 		if ( ! defined( 'JET_ENGINE_BREAK_BY_QUERY_ID' ) ) {
 			// set query ID to break by. Same query ID need to be set also for Listing and filter wisgets if you using this in combination with JSF
@@ -45,7 +50,7 @@ class Jet_Engine_Break_Listing_By_Months {
 
 		if ( ! defined( 'JET_ENGINE_BREAK_MONTH_OPEN_HTML' ) ) {
 			// set opening html tag(s) for month name
-			define( 'JET_ENGINE_BREAK_MONTH_OPEN_HTML', '<h4 class="jet-engine-break-listing" style="width:100%; flex: 0 0 100%;">' );
+			define( 'JET_ENGINE_BREAK_MONTH_OPEN_HTML', '<h4 class="jet-engine-break-listing" style="width:100%; flex: 0 0 100%; grid-column: 1 / -1;">' );
 		}
 
 		if ( ! defined( 'JET_ENGINE_BREAK_MONTH_CLOSE_HTML' ) ) {
@@ -56,6 +61,13 @@ class Jet_Engine_Break_Listing_By_Months {
 		if ( ! defined( 'JET_ENGINE_BREAK_MONTH_FORMAT' ) ) {
 			// set format of the month to show
 			define( 'JET_ENGINE_BREAK_MONTH_FORMAT', 'F, Y' );
+		}
+
+		if ( ! defined( 'JET_ENGINE_BREAK_MONTH_COMPARE_FORMAT' ) ) {
+			// Set date format to compare dates to break.
+			// Could be used to change break type. For example, default format 'F, Y' - is for months
+			// Others variants 'Y' - break by years, 'd, F, Y' - break by days
+			define( 'JET_ENGINE_BREAK_MONTH_COMPARE_FORMAT', 'F, Y' );
 		}
 
 	}
@@ -126,7 +138,10 @@ class Jet_Engine_Break_Listing_By_Months {
 			$prev_time    = $this->get_post_timestamp( $prev_post );
 			$current_time = $this->get_post_timestamp( $post );
 
-			if ( $prev_time && $current_time && date_i18n( 'F, Y', $prev_time ) !== date_i18n( 'F, Y', $current_time ) ) {
+			if ( $prev_time
+				&& $current_time
+				&& date_i18n( JET_ENGINE_BREAK_MONTH_COMPARE_FORMAT, $prev_time ) !== date_i18n( JET_ENGINE_BREAK_MONTH_COMPARE_FORMAT, $current_time ) 
+			) {
 				$this->render_month( $post );
 			}
 
@@ -138,6 +153,8 @@ class Jet_Engine_Break_Listing_By_Months {
 
 		if ( JET_ENGINE_BREAK_BY_FIELD ) {
 			$date = get_post_meta( $post->ID, JET_ENGINE_BREAK_BY_FIELD, true );
+		} elseif ( JET_ENGINE_BREAK_BY_PROP ) {
+			$date = isset( $post->{JET_ENGINE_BREAK_BY_PROP} ) ? $post->{JET_ENGINE_BREAK_BY_PROP} : false;
 		} else {
 			$date = $post->post_date;
 		}
