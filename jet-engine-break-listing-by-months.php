@@ -22,6 +22,8 @@ class Jet_Engine_Break_Listing_By_Months {
 
 		add_action( 'init', array( $this, 'setup' ) );
 		add_action( 'jet-engine/listing/before-grid-item', array( $this, 'handle_item' ), 10, 2 );
+		add_filter( 'jet-engine-break-month/prev-post', array( $this, 'posts_query_prev_post' ), 10, 3 );
+		add_filter( 'jet-engine-break-month/render-first', array( $this, 'render_first' ), 10 );
 
 	}
 
@@ -58,6 +60,44 @@ class Jet_Engine_Break_Listing_By_Months {
 
 	}
 
+	public function posts_query_prev_post( $post, $query, $listing ) {
+
+		if ( $post || $query->query_type !== 'posts' ) {
+			return $post;
+		}
+		
+		$page = $query->get_current_items_page();
+		
+		$args = $query->get_query_args();
+		
+		$args['paged'] = $page - 1;
+		
+		$posts_query = new \WP_Query( $args );
+		
+		$posts = $posts_query->get_posts();
+
+		$post = $posts[ array_key_last( $posts ) ] ?? null;
+		
+		return $post;
+
+	}
+
+	public function render_first( $render ) {
+
+		//do not render first header on JetEngine Load More
+		if ( ! empty( $_REQUEST['handler'] ) && $_REQUEST['handler'] === 'listing_load_more' ) {
+			return false;
+		}
+
+		//do not render first header on JetSmartFilters Load More pagination
+		if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] === 'jet_smart_filters' && ! empty( $_REQUEST['props']['pages'] ) ) {
+			return false;
+		}
+
+		return $render;
+
+	}
+
 	public function handle_item( $post, $listing ) {
 
 		if ( empty( $listing->query_vars['request']['query_id'] ) ) {
@@ -76,12 +116,12 @@ class Jet_Engine_Break_Listing_By_Months {
 
 		$index = jet_engine()->listings->data->get_index();
 
-		if ( 0 === $index ) {
+		if ( apply_filters( 'jet-engine-break-month/render-first', 0 === $index ) ) {
 			$this->render_month( $post );
 		} else {
 			
 			$items     = $query->get_items();
-			$prev_post = $items[ $index - 1 ];
+			$prev_post = apply_filters( 'jet-engine-break-month/prev-post', $items[ $index - 1 ] ?? null, $query, $listing );
 
 			$prev_time    = $this->get_post_timestamp( $prev_post );
 			$current_time = $this->get_post_timestamp( $post );
